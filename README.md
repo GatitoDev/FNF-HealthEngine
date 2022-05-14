@@ -14,7 +14,7 @@ If you want to download Friday Night Funkin 'thanks to this game, I was able to 
 ## Credits / shoutouts
 
 ### FNF Heatlh Engine
-- [GatitoDormilon](https://www.youtube.com/c/GatitoDormilon/featured) - Programmer, Art
+- [GatitoDev](https://www.youtube.com/c/GatitoDormilon/featured) - Programmer, Art
 
 ### Friday Night Funkin'
 - [ninjamuffin99](https://twitter.com/ninja_muffin99) - Programmer
