@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="noteSplashes.png">
+	<!-- Created with Adobe Animate version 22.0.2.168 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="note impact 1 blue instancia 10000" x="25" y="25" width="293" height="316" frameX="-8" frameY="-27" frameWidth="331" frameHeight="390"/>
+	<SubTexture name="note impact 1 blue instancia 10001" x="1296" y="25" width="326" height="366" frameX="-4" frameY="0" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 blue instancia 10002" x="1647" y="25" width="330" height="368" frameX="0" frameY="-2" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 blue instancia 10003" x="1396" y="811" width="328" height="363" frameX="-1" frameY="-18" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 blue instancia 10004" x="25" y="418" width="321" height="357" frameX="-8" frameY="-34" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 purple instancia 10000" x="343" y="25" width="292" height="316" frameX="-8" frameY="-27" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 purple instancia 10001" x="690" y="811" width="326" height="366" frameX="-4" frameY="0" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 purple instancia 10002" x="1041" y="811" width="330" height="368" frameX="0" frameY="-2" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 purple instancia 10003" x="1396" y="811" width="328" height="363" frameX="-1" frameY="-18" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 purple instancia 10004" x="25" y="1204" width="321" height="357" frameX="-8" frameY="-34" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 red instancia 10000" x="660" y="25" width="293" height="316" frameX="-7" frameY="-27" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 red instancia 10001" x="688" y="1204" width="326" height="366" frameX="-3" frameY="0" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 red instancia 10002" x="1039" y="1204" width="330" height="368" frameX="0" frameY="-2" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 red instancia 10003" x="1396" y="811" width="328" height="363" frameX="0" frameY="-18" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 1 red instancia 10004" x="1394" y="1204" width="321" height="357" frameX="-8" frameY="-34" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 2 blue instancia 10000" x="978" y="25" width="293" height="316" frameX="-7" frameY="-27" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 2 blue instancia 10001" x="1296" y="25" width="326" height="366" frameX="-3" frameY="0" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 2 blue instancia 10002" x="1647" y="25" width="330" height="368" frameX="0" frameY="-2" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 2 blue instancia 10003" x="1396" y="811" width="328" height="363" frameX="0" frameY="-18" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 2 blue instancia 10004" x="25" y="418" width="321" height="357" frameX="-8" frameY="-34" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 2 green instancia 10000" x="371" y="418" width="293" height="316" frameX="-8" frameY="-27" frameWidth="331" frameHeight="390"/>
+	<SubTexture name="note impact 2 green instancia 10001" x="689" y="418" width="325" height="366" frameX="-4" frameY="0" frameWidth="331" frameHeight="390"/>
+	<SubTexture name="note impact 2 green instancia 10002" x="1039" y="418" width="331" height="368" frameX="0" frameY="-2" frameWidth="331" frameHeight="390"/>
+	<SubTexture name="note impact 2 green instancia 10003" x="1395" y="418" width="330" height="363" frameX="-1" frameY="-18" frameWidth="331" frameHeight="390"/>
+	<SubTexture name="note impact 2 green instancia 10004" x="25" y="811" width="322" height="357" frameX="-8" frameY="-34" frameWidth="331" frameHeight="390"/>
+	<SubTexture name="note impact 2 purple instancia 10000" x="372" y="811" width="293" height="316" frameX="-7" frameY="-27" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 2 purple instancia 10001" x="690" y="811" width="326" height="366" frameX="-3" frameY="0" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 2 purple instancia 10002" x="1041" y="811" width="330" height="368" frameX="0" frameY="-2" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 2 purple instancia 10003" x="1396" y="811" width="328" height="363" frameX="-1" frameY="-18" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impact 2 purple instancia 10004" x="25" y="1204" width="321" height="357" frameX="-8" frameY="-34" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impatc red 2 instancia 10000" x="371" y="1204" width="292" height="316" frameX="-8" frameY="-27" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impatc red 2 instancia 10001" x="688" y="1204" width="326" height="366" frameX="-3" frameY="0" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impatc red 2 instancia 10002" x="1039" y="1204" width="330" height="368" frameX="0" frameY="-2" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impatc red 2 instancia 10003" x="1396" y="811" width="328" height="363" frameX="-1" frameY="-18" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="note impatc red 2 instancia 10004" x="1394" y="1204" width="321" height="357" frameX="-8" frameY="-34" frameWidth="330" frameHeight="390"/>
+	<SubTexture name="up confirm instancia 10000" x="1740" y="1204" width="238" height="235"/>
+	<SubTexture name="up confirm instancia 10001" x="25" y="1597" width="238" height="235"/>
+	<SubTexture name="up confirm instancia 10002" x="288" y="1597" width="216" height="213" frameX="-11" frameY="-11" frameWidth="238" frameHeight="235"/>
+	<SubTexture name="up confirm instancia 10003" x="288" y="1597" width="216" height="213" frameX="-11" frameY="-11" frameWidth="238" frameHeight="235"/>
+</TextureAtlas>

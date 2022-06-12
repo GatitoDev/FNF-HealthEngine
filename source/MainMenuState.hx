@@ -25,14 +25,17 @@ class MainMenuState extends MusicBeatState
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
-	#if !switch
-	var optionShit:Array<String> = ['story mode', 'freeplay'];
-	#else
-	var optionShit:Array<String> = ['story mode', 'freeplay'];
-	#end
+	var optionShit:Array<String> = [
+		'story mode', 
+		'freeplay', 
+		'options'
+	];
+	// If you want to add donations, no problem
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
+
+	var bg:FlxSprite;
 
 	override function create()
 	{
@@ -41,20 +44,20 @@ class MainMenuState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
-
 		if (!FlxG.sound.music.playing)
 		{
 			FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		}
 
+		transIn = FlxTransitionableState.defaultTransIn;
+		transOut = FlxTransitionableState.defaultTransOut;
+
 		persistentUpdate = persistentDraw = true;
 
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
-		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0.18;
-		bg.setGraphicSize(Std.int(bg.width * 1.1));
+		var yScroll:Float = Math.max(0.25 - (0.05 * (optionShit.length - 4)), 0.1);
+		bg = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
+		bg.scrollFactor.set(0, yScroll);
+		bg.setGraphicSize(Std.int(bg.width * 1.175));
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = true;
@@ -64,14 +67,13 @@ class MainMenuState extends MusicBeatState
 		add(camFollow);
 
 		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
-		magenta.scrollFactor.x = 0;
-		magenta.scrollFactor.y = 0.18;
-		magenta.setGraphicSize(Std.int(magenta.width * 1.1));
+		magenta.scrollFactor.set(0, yScroll);
+		magenta.setGraphicSize(Std.int(magenta.width * 1.175));
 		magenta.updateHitbox();
 		magenta.screenCenter();
 		magenta.visible = false;
-		magenta.antialiasing = true;
 		magenta.color = 0xFFfd719b;
+		magenta.antialiasing = true;
 		add(magenta);
 
 		menuItems = new FlxTypedGroup<FlxSprite>();
@@ -81,23 +83,26 @@ class MainMenuState extends MusicBeatState
 
 		for (i in 0...optionShit.length)
 		{
-			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 170));
+			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 180));
 			menuItem.frames = tex;
 			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
 			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
-			menuItem.screenCenter(X);
+
+			menuItem.screenCenter(X); // default position
+
 			menuItems.add(menuItem);
 			menuItem.scrollFactor.set();
 			menuItem.antialiasing = true;
+			menuItem.updateHitbox();
 		}
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
 		var versionShit:FlxText = new FlxText(15, FlxG.height - 24, 0, "" + Application.current.meta.get('version'), 12);
+		versionShit.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
 		// NG.core.calls.event.logEvent('swag').send();
@@ -174,6 +179,7 @@ class MainMenuState extends MusicBeatState
 								{
 									case 'story mode':
 										FlxG.switchState(new StoryMenuState());
+
 										trace("Story Menu Selected");
 									case 'freeplay':
 										FlxG.switchState(new FreeplayState());
@@ -181,9 +187,9 @@ class MainMenuState extends MusicBeatState
 										trace("Freeplay Menu Selected");
 
 									case 'options':
-										FlxTransitionableState.skipNextTransIn = true;
-										FlxTransitionableState.skipNextTransOut = true;
 										FlxG.switchState(new OptionsMenu());
+
+										trace("Options Menu Selected");
 								}
 							});
 						}

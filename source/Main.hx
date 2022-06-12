@@ -20,6 +20,9 @@ class Main extends Sprite
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
+	// engine version
+	public static var engineVersion:String = '1.1.5';
+
 	public static function main():Void
 	{
 		Lib.current.addChild(new Main());

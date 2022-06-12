@@ -38,16 +38,16 @@ class OptionsSubState extends MusicBeatSubstate
 		super.update(elapsed);
 
 		if (controls.UP_P)
-			curSelected -= 1;
+				curSelected -= 1;
 
 		if (controls.DOWN_P)
-			curSelected += 1;
+				curSelected += 1;
 
 		if (curSelected < 0)
-			curSelected = textMenuItems.length - 1;
+				curSelected = textMenuItems.length - 1;
 
 		if (curSelected >= textMenuItems.length)
-			curSelected = 0;
+				curSelected = 0;
 
 		grpOptionsTexts.forEach(function(txt:FlxText)
 		{
@@ -66,8 +66,5 @@ class OptionsSubState extends MusicBeatSubstate
 					FlxG.state.openSubState(new ControlsSubState());
 			}
 		}
-
-		if (controls.BACK)
-			FlxG.switchState(new MainMenuState());
 	}
 }
