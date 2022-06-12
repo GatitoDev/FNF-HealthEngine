@@ -17,7 +17,11 @@ class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
-	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Exit to menu', 'Change week', 'Search week'];
+	var menuItems:Array<String> = [
+		'Resume', 
+		'Restart Song', 
+		'Exit to menu'
+	];
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
@@ -114,20 +118,16 @@ class PauseSubState extends MusicBeatSubstate
 				case "Exit to menu":
 					FlxG.sound.play(Paths.sound('cancelMenu'));
 					FlxG.switchState(new MainMenuState());
-				case "Change week":
-					FlxG.sound.play(Paths.sound('confirmMenu'));
-					FlxG.switchState(new StoryMenuState());
-				case "Search week":
-					FlxG.sound.play(Paths.sound('confirmMenu'));
-					FlxG.switchState(new FreeplayState());
 			}
 		}
 
+		/*
 		if (FlxG.keys.justPressed.J)
 		{
 			// for reference later!
 			// PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
 		}
+		*/
 	}
 
 	override function destroy()
