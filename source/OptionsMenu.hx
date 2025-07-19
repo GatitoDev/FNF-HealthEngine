@@ -1,8 +1,7 @@
 package;
 
-#if desktop
-import Discord.DiscordClient;
-#end
+import openfl.Lib;
+import Options;
 import Controls.Control;
 import flash.text.TextField;
 import flixel.FlxG;
@@ -17,189 +16,225 @@ import lime.utils.Assets;
 
 class OptionsMenu extends MusicBeatState
 {
-	public static var instance:OptionsMenu;
-
 	var selector:FlxText;
 	var curSelected:Int = 0;
 
-	var menuBG:FlxSprite;
+	var options:Array<OptionCatagory> = [
+		new OptionCatagory("Gameplay", [
+			new DFJKOption(controls),
+			new DownscrollOption("Change the layout of the strumline."),
+			new GhostTapOption("Ghost Tapping is when you tap a direction and it doesn't give you a miss."),
+			new Judgement("Customize your Hit Timings (LEFT or RIGHT)"),
+			#if desktop
+			new FPSCapOption("Cap your FPS (Left for -10, Right for +10. SHIFT to go faster)"),
+			#end
+			new ScrollSpeedOption("Change your scroll speed (Left for -0.1, right for +0.1. If it's at 1, it will be chart dependent)"),
+			new AccuracyDOption("Change how accuracy is calculated. (Accurate = Simple, Complex = Milisecond Based)"),
+			// new OffsetMenu("Get a note offset based off of your inputs!"),
+			new CustomizeGameplay("Drag'n'Drop Gameplay Modules around to your preference")
+		]),
+		new OptionCatagory("Appearance", [
+			#if desktop
+			new DistractionsAndEffectsOption("Toggle stage distractions that can hinder your gameplay."),
+			new RainbowFPSOption("Make the FPS Counter Rainbow (Only works with the FPS Counter toggled on and Flashing Lights toggled off)"),
+			new AccuracyOption("Display accuracy information."),
+			new NPSDisplayOption("Shows your current Notes Per Second."),
+			new SongPositionOption("Show the songs current position (as a bar)"),
+			#else
+			new DistractionsAndEffectsOption("Toggle stage distractions that can hinder your gameplay.")
+			#end
+		]),
+		
+		new OptionCatagory("Misc", [
+			#if desktop
+			new FPSOption("Toggle the FPS Counter"),
+			new ReplayOption("View replays"),
+			#end
+			new FlashingLightsOption("Toggle flashing lights that can cause epileptic seizures and strain."),
+			new BotPlay("Showcase your charts and mods with autoplay.")
+		])
+		
+	];
 
-	var controlsStrings:Array<String> = [];
-
-	var optionsText:FlxText;
-	var optionsDesc:FlxText;
-
-	var descText:FlxText;
-	var descBG:FlxSprite;
-
+	private var currentDescription:String = "";
 	private var grpControls:FlxTypedGroup<Alphabet>;
+	public static var versionShit:FlxText;
+
+	var currentSelectedCat:OptionCatagory;
 
 	override function create()
 	{
-		instance = this;
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
 
-		#if desktop
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Options", null);
-		#end
-
-		FlxG.sound.playMusic(Paths.music('breakfast'));
-
-		menuBG = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = CoolUtil.coolTextFile(Paths.txt('options'));
+		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
-		menuBG.color = FlxColor.GRAY; // Here you can change the background color
 		menuBG.antialiasing = true;
 		add(menuBG);
 
-		optionsText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
-		optionsText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
-		optionsDesc = new FlxText(830, 80, 450, "", 32);
-		optionsDesc.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		var optionsBG:FlxSprite = new FlxSprite(optionsText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.55), 80, 0xFF000000);
-		optionsBG.alpha = 0.6;
-		add(optionsBG);
-		add(optionsText);
-		add(optionsDesc);
-
-		descBG = new FlxSprite(50, 640).makeGraphic(1180, 38, FlxColor.BLACK);
-		descBG.alpha = 0.6;
-		descBG.scrollFactor.set();
-		descText = new FlxText(62, 648, "This option is under development, possibly it has errors");
-		descText.setFormat(Paths.font("vcr.ttf"), 22, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		descText.borderSize = 1.25;
-		// If you want to remove it no problem
-		add(descBG);
-		add(descText);
-
 		grpControls = new FlxTypedGroup<Alphabet>();
 		add(grpControls);
-		controlsStrings[controlsStrings.length] = " "; // I HAVE SEVERE AUTISM LOOODALOFDALK
-		for (i in 0...controlsStrings.length)
+
+		for (i in 0...options.length)
 		{
-			if (controlsStrings[i].indexOf('set') != -1)
-			{
-				var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, controlsStrings[i].substring(3).split(" || ")[0], true, false);
-				controlLabel.isMenuItem = true;
-				controlLabel.targetY = i;
-				grpControls.add(controlLabel);
-			}
+			var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, options[i].getName(), true, false);
+			controlLabel.isMenuItem = true;
+			controlLabel.targetY = i;
+			grpControls.add(controlLabel);
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 		}
 
+		currentDescription = "none";
+
+		versionShit = new FlxText(5, FlxG.height - 18, 0, "Offset (Left, Right): " + FlxG.save.data.offset + " - Description - " + currentDescription, 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
+
 		super.create();
-		changeSelection();
-		// openSubState(new OptionsSubState());
 	}
 
-	function getOption(name:String) {
-		switch (name)
-		{
-			case "Distraction":
-					return FlxG.save.data.distraction;
-			case "Hide HUD":
-					return FlxG.save.data.hidehud;
-			case "CPU Strums":
-					return FlxG.save.data.cpuStrums;
-			case "Classic HUD":
-				return FlxG.save.data.classichud;
-		}
-		return "None Found";
-	}
+	var isCat:Bool = false;
+	
+
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
-		if (FlxG.sound.music.volume < 0.8)
-		{
-			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-		}
-
-		if (controls.ACCEPT)
-			{
-					trace(controlsStrings[curSelected].substring(3).split(" || ")[0]);
-				switch (controlsStrings[curSelected].substring(3).split(" || ")[0])
-						{
-							case "Distraction":
-									FlxG.save.data.distraction = !FlxG.save.data.distraction;
-									optionsText.text = FlxG.save.data.distraction;
-							case "Hide HUD":
-									FlxG.save.data.hidehud = !FlxG.save.data.hidehud;
-									optionsText.text = FlxG.save.data.hidehud;
-							case "CPU Strums":
-									FlxG.save.data.cpuStrums = !FlxG.save.data.cpuStrums;
-									optionsText.text = FlxG.save.data.cpuStrums;
-							case "Classic HUD":
-									FlxG.save.data.classichud = !FlxG.save.data.classichud;
-									optionsText.text = FlxG.save.data.classichud;
-							case "Reset":
-									reset();
-						}
-			}
-			if (controls.BACK)
+			if (controls.BACK && !isCat)
 				FlxG.switchState(new MainMenuState());
+			else if (controls.BACK)
+			{
+				isCat = false;
+				grpControls.clear();
+				for (i in 0...options.length)
+					{
+						var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, options[i].getName(), true, false);
+						controlLabel.isMenuItem = true;
+						controlLabel.targetY = i;
+						grpControls.add(controlLabel);
+						// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
+					}
+				curSelected = 0;
+			}
 			if (controls.UP_P)
 				changeSelection(-1);
 			if (controls.DOWN_P)
 				changeSelection(1);
-	}
+			
+			if (isCat)
+			{
+				if (currentSelectedCat.getOptions()[curSelected].getAccept())
+				{
+					if (FlxG.keys.pressed.SHIFT)
+						{
+							if (FlxG.keys.pressed.RIGHT)
+								currentSelectedCat.getOptions()[curSelected].right();
+							if (FlxG.keys.pressed.LEFT)
+								currentSelectedCat.getOptions()[curSelected].left();
+						}
+					else
+					{
+						if (FlxG.keys.justPressed.RIGHT)
+							currentSelectedCat.getOptions()[curSelected].right();
+						if (FlxG.keys.justPressed.LEFT)
+							currentSelectedCat.getOptions()[curSelected].left();
+					}
+				}
+				else
+				{
 
-	function waitingInput():Void
-	{
-		if (FlxG.keys.getIsDown().length > 0)
-		{
-			PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxG.keys.getIsDown()[0].ID, null);
-		}
-		// PlayerSettings.player1.controls.replaceBinding(Control)
+					if (FlxG.keys.pressed.SHIFT)
+					{
+						if (FlxG.keys.justPressed.RIGHT)
+							FlxG.save.data.offset += 0.1;
+						else if (FlxG.keys.justPressed.LEFT)
+							FlxG.save.data.offset -= 0.1;
+					}
+					else if (FlxG.keys.pressed.RIGHT)
+						FlxG.save.data.offset += 0.1;
+					else if (FlxG.keys.pressed.LEFT)
+						FlxG.save.data.offset -= 0.1;
+					
+					versionShit.text = "Offset (Left, Right, Shift for slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset,2) + " - Description - " + currentDescription;
+				}
+			}
+			else
+			{
+				if (FlxG.keys.pressed.SHIFT)
+					{
+						if (FlxG.keys.justPressed.RIGHT)
+							FlxG.save.data.offset += 0.1;
+						else if (FlxG.keys.justPressed.LEFT)
+							FlxG.save.data.offset -= 0.1;
+					}
+					else if (FlxG.keys.pressed.RIGHT)
+						FlxG.save.data.offset += 0.1;
+					else if (FlxG.keys.pressed.LEFT)
+						FlxG.save.data.offset -= 0.1;
+				
+				versionShit.text = "Offset (Left, Right, Shift for slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset,2) + " - Description - " + currentDescription;
+			}
+		
+
+			if (controls.RESET)
+					FlxG.save.data.offset = 0;
+
+			if (controls.ACCEPT)
+			{
+				if (isCat)
+				{
+					if (currentSelectedCat.getOptions()[curSelected].press()) {
+						grpControls.remove(grpControls.members[curSelected]);
+						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, currentSelectedCat.getOptions()[curSelected].getDisplay(), true, false);
+						ctrl.isMenuItem = true;
+						grpControls.add(ctrl);
+					}
+				}
+				else
+				{
+					currentSelectedCat = options[curSelected];
+					isCat = true;
+					grpControls.clear();
+					for (i in 0...currentSelectedCat.getOptions().length)
+						{
+							var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, currentSelectedCat.getOptions()[i].getDisplay(), true, false);
+							controlLabel.isMenuItem = true;
+							controlLabel.targetY = i;
+							grpControls.add(controlLabel);
+							// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
+						}
+					curSelected = 0;
+				}
+			}
+		FlxG.save.flush();
 	}
 
 	var isSettingControl:Bool = false;
 
-	function changeBinding():Void
-	{
-		if (!isSettingControl)
-		{
-			isSettingControl = true;
-		}
-	}
-
 	function changeSelection(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+
+		FlxG.sound.play(Paths.sound("scrollMenu"), 0.4);
 
 		curSelected += change;
 
 		if (curSelected < 0)
-				curSelected = grpControls.length - 1;
+			curSelected = grpControls.length - 1;
 		if (curSelected >= grpControls.length)
-				curSelected = 0;
+			curSelected = 0;
 
-		switch (controlsStrings[curSelected].substring(3).split(" || ")[0])
-		{
-			case "Distraction":
-					optionsText.text = FlxG.save.data.distraction;
-					descBG.visible = false;
-					descText.visible = false;
-			case "Hide HUD":
-					optionsText.text = FlxG.save.data.hidehud;
-					descBG.visible = false;
-					descText.visible = false;
-			case "CPU Strums":
-					optionsText.text = FlxG.save.data.cpuStrums;
-					descBG.visible = true;
-					descText.visible = true;
-			case "Classic HUD":
-					optionsText.text = FlxG.save.data.classichud;
-					descBG.visible = false;
-					descText.visible = false;
-		}
-		optionsDesc.text = controlsStrings[curSelected].split(" || ")[1];
+		if (isCat)
+			currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
+		else
+			currentDescription = "Please select a category";
+		versionShit.text = "Offset (Left, Right, Shift for slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset,2) + " - Description - " + currentDescription;
 
 		// selector.y = (70 * curSelected) + 30;
 
 		var bullShit:Int = 0;
+
 		for (item in grpControls.members)
 		{
 			item.targetY = bullShit - curSelected;
@@ -214,9 +249,5 @@ class OptionsMenu extends MusicBeatState
 				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
-	}
-
-	function reset() {
-
 	}
 }

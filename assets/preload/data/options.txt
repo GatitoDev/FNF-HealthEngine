@@ -1,4 +1,0 @@
-setDistraction || If you don't want to be distracted, just activate this option || false
-setHide HUD || This option hides most of the HUD elements || false
-setCPU Strums || The enemy's arrows shine || false
-setClassic HUD || If enabled, will set Funkin' Source's default hud position || false

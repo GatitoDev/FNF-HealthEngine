@@ -5,34 +5,31 @@ import flixel.FlxSprite;
 
 class NoteSplash extends FlxSprite
 {
-	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0) {
-		super(x, y);
-		frames = Paths.getSparrowAtlas('noteSplashes', 'shared');
-		animation.addByPrefix("note1-0", "note impact 1 blue", 24, false);
-		animation.addByPrefix("note2-0", "note impact 1 green", 24, false);
-		animation.addByPrefix("note0-0", "note impact 1 purple", 24, false);
-		animation.addByPrefix("note3-0", "note impact 1 red", 24, false);
+    static final COLORS:Array<String> = ["purple", "blue", "green", "red"];
+    static final ANIM_TYPES:Array<String> = ["note impact 1 ", "note impact 2 "];
 
-		animation.addByPrefix("note1-1", "note impact 2 blue", 24, false);
-		animation.addByPrefix("note2-1", "note impact 2 green", 24, false);
-		animation.addByPrefix("note0-1", "note impact 2 purple", 24, false);
-		animation.addByPrefix("note3-1", "note impact 2 red", 24, false);
-		setupNoteSplash(x, y, note);
-	}
+    public function new(x:Float = 0, y:Float = 0, ?note:Int = 0)  {
+        super(x, y);
+        setupAnimations();
+        setupNoteSplash(x, y, note);
+    }
 
-	public function setupNoteSplash(x:Float, y:Float, ?note:Int = 0) {
-		setPosition(x, y);
-		alpha = 0.6;
-		animation.play('note' + note + '-' + FlxG.random.int(0, 1), true);
-		animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
-		updateHitbox();
-		offset.set(Std.int(0.3 * width), Std.int(0.3 * height));
-	}
+    function setupAnimations():Void {
+        frames = Paths.getSparrowAtlas('noteSplashes');
+        for (i => color in COLORS) for (j => anim in ANIM_TYPES) animation.addByPrefix('note$i-$j', anim + color, 24, false);
+    }
 
-	override public function update(elapsed)
-	{
-		if (animation.curAnim.finished)
-			kill();
-		super.update(elapsed);
-	}
+    public function setupNoteSplash(x:Float, y:Float, ?note:Int = 0):Void {
+        setPosition(x, y);
+        alpha = 0.6;        
+        animation.play('note$note-${FlxG.random.int(0, ANIM_TYPES.length - 1)}', true);
+        animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
+        updateHitbox();
+        offset.set(width * 0.3, height * 0.3);
+    }
+
+    override public function update(elapsed:Float):Void {
+        if (animation.curAnim.finished) kill();
+        super.update(elapsed);
+    }
 }

@@ -1,8 +1,6 @@
 package;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.animation.FlxBaseAnimation;
 import flixel.graphics.frames.FlxAtlasFrames;
 
 using StringTools;
@@ -16,7 +14,6 @@ class Character extends FlxSprite
 	public var curCharacter:String = 'bf';
 
 	public var holdTimer:Float = 0;
-	public var barColor:Int;
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
 	{
@@ -26,19 +23,12 @@ class Character extends FlxSprite
 		curCharacter = character;
 		this.isPlayer = isPlayer;
 
-		barColor = isPlayer ? 0xFF66FF33 : 0xFFFF0000;
-		// If you want to create your own BF or character, 
-		// by default if it is an enemy, its life bar will be red and if it is a BF, it will be green.
-		// When you create your character you have to put
-		// barColor = here you put the color of the bar of your character or BF;
-
 		var tex:FlxAtlasFrames;
 		antialiasing = true;
 
 		switch (curCharacter)
 		{
 			case 'gf':
-				barColor = 0xFFA5004D;
 				// GIRLFRIEND CODE
 				tex = Paths.getSparrowAtlas('characters/GF_assets');
 				frames = tex;
@@ -71,7 +61,6 @@ class Character extends FlxSprite
 				playAnim('danceRight');
 
 			case 'gf-christmas':
-				barColor = 0xFFA5004D;
 				tex = Paths.getSparrowAtlas('characters/gfChristmas');
 				frames = tex;
 				animation.addByPrefix('cheer', 'GF Cheer', 24, false);
@@ -103,7 +92,6 @@ class Character extends FlxSprite
 				playAnim('danceRight');
 
 			case 'gf-car':
-				barColor = 0xFFA5004D;
 				tex = Paths.getSparrowAtlas('characters/gfCar');
 				frames = tex;
 				animation.addByIndices('singUP', 'GF Dancing Beat Hair blowing CAR', [0], "", 24, false);
@@ -117,7 +105,6 @@ class Character extends FlxSprite
 				playAnim('danceRight');
 
 			case 'gf-pixel':
-				barColor = 0xFFA5004D;
 				tex = Paths.getSparrowAtlas('characters/gfPixel');
 				frames = tex;
 				animation.addByIndices('singUP', 'GF IDLE', [2], "", 24, false);
@@ -134,7 +121,6 @@ class Character extends FlxSprite
 				antialiasing = false;
 
 			case 'dad':
-				barColor = 0xFFAF66CE;
 				// DAD ANIMATION LOADING CODE
 				tex = Paths.getSparrowAtlas('characters/DADDY_DEAREST');
 				frames = tex;
@@ -152,7 +138,6 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 			case 'spooky':
-				barColor = 0xFFD57E00;
 				tex = Paths.getSparrowAtlas('characters/spooky_kids_assets');
 				frames = tex;
 				animation.addByPrefix('singUP', 'spooky UP NOTE', 24, false);
@@ -172,7 +157,6 @@ class Character extends FlxSprite
 
 				playAnim('danceRight');
 			case 'mom':
-				barColor = 0xFFD8558E;
 				tex = Paths.getSparrowAtlas('characters/Mom_Assets');
 				frames = tex;
 
@@ -193,7 +177,6 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			case 'mom-car':
-				barColor = 0xFFD8558E;
 				tex = Paths.getSparrowAtlas('characters/momCar');
 				frames = tex;
 
@@ -213,14 +196,13 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 			case 'monster':
-				barColor = 0xFFF3FF6E;
 				tex = Paths.getSparrowAtlas('characters/Monster_Assets');
 				frames = tex;
 				animation.addByPrefix('idle', 'monster idle', 24, false);
 				animation.addByPrefix('singUP', 'monster up note', 24, false);
 				animation.addByPrefix('singDOWN', 'monster down', 24, false);
-				animation.addByPrefix('singLEFT', 'Monster Right note', 24, false);
-				animation.addByPrefix('singRIGHT', 'Monster left note', 24, false);
+				animation.addByPrefix('singLEFT', 'Monster left note', 24, false);
+				animation.addByPrefix('singRIGHT', 'Monster Right note', 24, false);
 
 				addOffset('idle');
 				addOffset("singUP", -20, 50);
@@ -229,14 +211,13 @@ class Character extends FlxSprite
 				addOffset("singDOWN", -30, -40);
 				playAnim('idle');
 			case 'monster-christmas':
-				barColor = 0xFFF3FF6E;
 				tex = Paths.getSparrowAtlas('characters/monsterChristmas');
 				frames = tex;
 				animation.addByPrefix('idle', 'monster idle', 24, false);
 				animation.addByPrefix('singUP', 'monster up note', 24, false);
 				animation.addByPrefix('singDOWN', 'monster down', 24, false);
-				animation.addByPrefix('singLEFT', 'Monster Right note', 24, false);
-				animation.addByPrefix('singRIGHT', 'Monster left note', 24, false);
+				animation.addByPrefix('singLEFT', 'Monster left note', 24, false);
+				animation.addByPrefix('singRIGHT', 'Monster Right note', 24, false);
 
 				addOffset('idle');
 				addOffset("singUP", -20, 50);
@@ -245,7 +226,6 @@ class Character extends FlxSprite
 				addOffset("singDOWN", -40, -94);
 				playAnim('idle');
 			case 'pico':
-				barColor = 0xFFB7D855;
 				tex = Paths.getSparrowAtlas('characters/Pico_FNF_assetss');
 				frames = tex;
 				animation.addByPrefix('idle', "Pico Idle Dance", 24);
@@ -285,7 +265,6 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'bf':
-				barColor = 0xFF31B0D1;
 				var tex = Paths.getSparrowAtlas('characters/BOYFRIEND');
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
@@ -325,7 +304,6 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'bf-christmas':
-				barColor = 0xFF31B0D1;
 				var tex = Paths.getSparrowAtlas('characters/bfChristmas');
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
@@ -354,7 +332,6 @@ class Character extends FlxSprite
 
 				flipX = true;
 			case 'bf-car':
-				barColor = 0xFF31B0D1;
 				var tex = Paths.getSparrowAtlas('characters/bfCar');
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
@@ -380,7 +357,6 @@ class Character extends FlxSprite
 
 				flipX = true;
 			case 'bf-pixel':
-				barColor = 0xFF7BD6F6;
 				frames = Paths.getSparrowAtlas('characters/bfPixel');
 				animation.addByPrefix('idle', 'BF IDLE', 24, false);
 				animation.addByPrefix('singUP', 'BF UP NOTE', 24, false);
@@ -414,7 +390,6 @@ class Character extends FlxSprite
 
 				flipX = true;
 			case 'bf-pixel-dead':
-				barColor = 0xFF7BD6F6;
 				frames = Paths.getSparrowAtlas('characters/bfPixelsDEAD');
 				animation.addByPrefix('singUP', "BF Dies pixel", 24, false);
 				animation.addByPrefix('firstDeath', "BF Dies pixel", 24, false);
@@ -433,7 +408,6 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'senpai':
-				barColor = 0xFFFAA6F;
 				frames = Paths.getSparrowAtlas('characters/senpai');
 				animation.addByPrefix('idle', 'Senpai Idle', 24, false);
 				animation.addByPrefix('singUP', 'SENPAI UP NOTE', 24, false);
@@ -454,7 +428,6 @@ class Character extends FlxSprite
 
 				antialiasing = false;
 			case 'senpai-angry':
-				barColor = 0xFFFAA6F;
 				frames = Paths.getSparrowAtlas('characters/senpai');
 				animation.addByPrefix('idle', 'Angry Senpai Idle', 24, false);
 				animation.addByPrefix('singUP', 'Angry Senpai UP NOTE', 24, false);
@@ -475,7 +448,6 @@ class Character extends FlxSprite
 				antialiasing = false;
 
 			case 'spirit':
-				barColor = 0xFFF3C6E;
 				frames = Paths.getPackerAtlas('characters/spirit');
 				animation.addByPrefix('idle', "idle spirit_", 24, false);
 				animation.addByPrefix('singUP', "up_", 24, false);
@@ -497,7 +469,6 @@ class Character extends FlxSprite
 				antialiasing = false;
 
 			case 'parents-christmas':
-				barColor = 0xFFAF66CE;
 				frames = Paths.getSparrowAtlas('characters/mom_dad_christmas_assets');
 				animation.addByPrefix('idle', 'Parent Christmas Idle', 24, false);
 				animation.addByPrefix('singUP', 'Parent Up Note Dad', 24, false);
@@ -545,10 +516,7 @@ class Character extends FlxSprite
 					animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
 					animation.getByName('singLEFTmiss').frames = oldMiss;
 				}
-
-				if (curCharacter.startsWith('bf'))
-					barColor = 0xFF31B0D1;	
-			}		
+			}
 		}
 	}
 

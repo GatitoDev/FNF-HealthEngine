@@ -26,10 +26,6 @@ class Paths
 			var levelPath = getLibraryPathForce(file, currentLevel);
 			if (OpenFlAssets.exists(levelPath, type))
 				return levelPath;
-
-			levelPath = getLibraryPathForce(file, "shared");
-			if (OpenFlAssets.exists(levelPath, type))
-				return levelPath;
 		}
 
 		return getPreloadPath(file);
@@ -45,7 +41,7 @@ class Paths
 		return '$library:assets/$library/$file';
 	}
 
-	inline static function getPreloadPath(file:String)
+	inline static public function getPreloadPath(file:String)
 	{
 		return 'assets/$file';
 	}
@@ -53,6 +49,16 @@ class Paths
 	inline static public function file(file:String, type:AssetType = TEXT, ?library:String)
 	{
 		return getPath(file, type, library);
+	}
+
+	inline static public function lua(key:String,?library:String)
+	{
+		return getPath('data/$key.lua', TEXT, library);
+	}
+
+	inline static public function luaImage(key:String, ?library:String)
+	{
+		return getPath('data/$key.png', IMAGE, library);
 	}
 
 	inline static public function txt(key:String, ?library:String)
@@ -85,14 +91,14 @@ class Paths
 		return getPath('music/$key.$SOUND_EXT', MUSIC, library);
 	}
 
-	inline static public function voices(song:String)
+	inline static public function voices(song:String, ?library:String)
 	{
-		return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+		return getPath('songs/${song.toLowerCase()}/Voices.$SOUND_EXT', SOUND, library);
 	}
 
-	inline static public function inst(song:String)
+	inline static public function inst(song:String, ?library:String)
 	{
-		return 'songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
+		return getPath('songs/${song.toLowerCase()}/Inst.$SOUND_EXT', SOUND, library);
 	}
 
 	inline static public function image(key:String, ?library:String)

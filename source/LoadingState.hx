@@ -34,27 +34,24 @@ class LoadingState extends MusicBeatState
 		this.stopMusic = stopMusic;
 	}
 	
-	var funkay:FlxSprite;
-	var loadBar:FlxSprite;
-	
 	override function create()
 	{
-		var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d);
-		add(bg);
-		funkay = new FlxSprite(0, 0).loadGraphic(Paths.image('images/funkay.png'));
-		funkay.setGraphicSize(0, FlxG.height);
-		funkay.updateHitbox();
-		// funkay.antialiasing = ClientPrefs.globalAntialiasing;
-		add(funkay);
-		funkay.scrollFactor.set();
-		funkay.screenCenter();
+		logo = new FlxSprite(-150, -100);
+		logo.frames = Paths.getSparrowAtlas('logoBumpin');
+		logo.antialiasing = true;
+		logo.animation.addByPrefix('bump', 'logo bumpin', 24);
+		logo.animation.play('bump');
+		logo.updateHitbox();
+		// logoBl.screenCenter();
+		// logoBl.color = FlxColor.BLACK;
 
-		/*
-		loadBar = new FlxSprite(0, FlxG.height - 20).makeGraphic(FlxG.width, 10, 0xffff16d2);
-		loadBar.screenCenter(X);
-		loadBar.antialiasing = ClientPrefs.globalAntialiasing;
-		add(loadBar);
-		*/
+		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
+		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
+		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
+		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+		gfDance.antialiasing = true;
+		add(gfDance);
+		add(logo);
 		
 		initSongsManifest().onComplete
 		(
@@ -107,6 +104,19 @@ class LoadingState extends MusicBeatState
 		}
 	}
 	
+	override function beatHit()
+	{
+		super.beatHit();
+		
+		logo.animation.play('bump');
+		danceLeft = !danceLeft;
+		
+		if (danceLeft)
+			gfDance.animation.play('danceRight');
+		else
+			gfDance.animation.play('danceLeft');
+	}
+	
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -121,7 +131,7 @@ class LoadingState extends MusicBeatState
 		if (stopMusic && FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 		
-		FlxG.switchState(target);
+		FlxG.switchState(() -> target);
 	}
 	
 	static function getSongPath()
@@ -136,7 +146,7 @@ class LoadingState extends MusicBeatState
 	
 	inline static public function loadAndSwitchState(target:FlxState, stopMusic = false)
 	{
-		FlxG.switchState(getNextState(target, stopMusic));
+		FlxG.switchState(() -> getNextState(target, stopMusic));
 	}
 	
 	static function getNextState(target:FlxState, stopMusic = false):FlxState
