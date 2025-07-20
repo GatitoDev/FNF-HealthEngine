@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
-	<app title="Friday Night Funkin' Kade Engine" file="Kade Engine" packageName="com.ninjamuffin99.funkin" package="com.ninjamuffin99.funkin" main="Main" version="0.2.7.1" company="ninjamuffin99" preloader="flixel.system.FlxPreloader" />
+	<app title="Friday Night Funkin' Health Engine" file="Health Engine" packageName="com.ninjamuffin99.funkin" package="com.ninjamuffin99.funkin" main="Main" version="0.2.7.1" company="ninjamuffin99" preloader="flixel.system.FlxPreloader" />
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
 	<set name="SWF_VERSION" value="11.8" />
 	<setenv name="HAXEPATH" value="./"/>

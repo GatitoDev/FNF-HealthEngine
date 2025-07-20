@@ -1,0 +1,51 @@
+digraph graphname {
+	node [shape=plaintext];
+n761991[label=<<table BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<tr><td port="in" bgcolor="lightgray">(761991) BKConditional</td></tr>
+	<tr><td port="out"></td></tr>
+</table>>];
+n761990[label=<<table BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<tr><td port="in" bgcolor="lightgray">(761990) BKConditional</td></tr>
+	<tr><td port="e0" align="left">var _hx_tmp = \"\" + scoreFormatted</td></tr>
+	<tr><td port="e1" align="left">var _hx_tmp = _hx_tmp + \" (\"</td></tr>
+	<tr><td port="e2" align="left">var _hx_tmp = _hx_tmp + scoreDef</td></tr>
+	<tr><td port="e3" align="left">_hx_tmp = _hx_tmp + \")\"</td></tr>
+	<tr><td port="out"></td></tr>
+</table>>];
+n761989[label=<<table BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<tr><td port="in" bgcolor="lightgray">(761989) BKConditional</td></tr>
+	<tr><td port="e0" align="left">var _hx_tmp</td></tr>
+	<tr><td port="e1" align="left">var _hx_tmp = Conductor.safeFrames != 10</td></tr>
+	<tr><td port="out"></td></tr>
+</table>>];
+n761988[label=<<table BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<tr><td port="in" bgcolor="lightgray">(761988) BKNormal</td></tr>
+	<tr><td port="e0" align="left">var _hx_tmp = ! flixel.FlxG.save.data.botplay</td></tr>
+	<tr><td port="out"></td></tr>
+</table>>];
+n761987[label=<<table BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<tr><td port="in" bgcolor="lightgray">(761987) BKConditional</td></tr>
+	<tr><td port="e0" align="left">var _hx_tmp = \"NPS: \" + nps</td></tr>
+	<tr><td port="e1" align="left">var _hx_tmp = _hx_tmp + \" (Max \"</td></tr>
+	<tr><td port="e2" align="left">var _hx_tmp = _hx_tmp + maxNPS</td></tr>
+	<tr><td port="e3" align="left">var _hx_tmp = _hx_tmp + \")\"</td></tr>
+	<tr><td port="e4" align="left">parts.push(_hx_tmp)</td></tr>
+	<tr><td port="out"></td></tr>
+</table>>];
+n761986[label=<<table BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<tr><td port="in" bgcolor="lightgray">(761986) BKFunctionEnd</td></tr>
+	<tr><td port="out"></td></tr>
+</table>>];
+n761985[label=<<table BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<tr><td port="in" bgcolor="lightgray">(761985) BKFunctionBegin</td></tr>
+	<tr><td port="e0" align="left">var parts = []</td></tr>
+	<tr><td port="e1" align="left">var scoreFormatted = flixel.util.FlxStringUtil.formatMoney(score, false, true)</td></tr>
+	<tr><td port="e2" align="left">var _hx_tmp = flixel.FlxG.save.data.npsDisplay</td></tr>
+	<tr><td port="out"></td></tr>
+</table>>];
+n1[label=<<table BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	<tr><td port="in" bgcolor="lightgray">(1) BKRoot</td></tr>
+	<tr><td port="out"></td></tr>
+</table>>];
+n1:out -> n761985:in[label="CFGFunction"];
+}

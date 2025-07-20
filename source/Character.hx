@@ -131,10 +131,10 @@ class Character extends FlxSprite
 				animation.addByPrefix('singLEFT', 'Dad Sing Note LEFT', 24);
 
 				addOffset('idle');
-				addOffset("singUP", -6, 50);
-				addOffset("singRIGHT", 0, 27);
-				addOffset("singLEFT", -10, 10);
-				addOffset("singDOWN", 0, -30);
+				addOffset("singUP", 0, -30);
+				addOffset("singRIGHT", -7, 12);
+				addOffset("singLEFT", -6, 50);
+				addOffset("singDOWN", -4, -26);
 
 				playAnim('idle');
 			case 'spooky':

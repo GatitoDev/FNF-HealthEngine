@@ -1,73 +1,67 @@
 package;
 
+import flixel.group.FlxSpriteGroup;
+import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.FlxObject;
-import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
-/**
-	*DEBUG MODE
- */
 class AnimationDebug extends FlxState
 {
-	var bf:Boyfriend;
-	var dad:Character;
 	var char:Character;
 	var textAnim:FlxText;
 	var dumbTexts:FlxTypedGroup<FlxText>;
 	var animList:Array<String> = [];
 	var curAnim:Int = 0;
-	var isDad:Bool = true;
-	var daAnim:String = 'spooky';
 	var camFollow:FlxObject;
+	
+	// Panel variables
+	var panelGroup:FlxTypedSpriteGroup<FlxSprite>;
+	var selectionBox:FlxSprite;
+	var panelWidth:Int = 300;
+	var panelPadding:Int = 10;
+	var panelHeaderHeight:Int = 30;
+	var textHeight:Int = 20;
+	var textSpacing:Int = 5;
+	var contentIndent:Int = 10; // Sangría adicional para el contenido
 
 	public function new(daAnim:String = 'spooky')
 	{
 		super();
-		this.daAnim = daAnim;
-	}
-
-	override function create()
-	{
 		FlxG.sound.music.stop();
 
 		var gridBG:FlxSprite = FlxGridOverlay.create(10, 10);
 		gridBG.scrollFactor.set(0.5, 0.5);
 		add(gridBG);
 
-		if (daAnim == 'bf')
-			isDad = false;
+		char = daAnim == 'bf' ? new Boyfriend(0, 0) : new Character(0, 0, daAnim);
+		char.screenCenter();
+		char.debugMode = true;
+		char.flipX = false;
+		add(char);
 
-		if (isDad)
-		{
-			dad = new Character(0, 0, daAnim);
-			dad.screenCenter();
-			dad.debugMode = true;
-			add(dad);
-
-			char = dad;
-			dad.flipX = false;
-		}
-		else
-		{
-			bf = new Boyfriend(0, 0);
-			bf.screenCenter();
-			bf.debugMode = true;
-			add(bf);
-
-			char = bf;
-			bf.flipX = false;
-		}
-
+		initPanel();
+		
+		// Create selection box (full panel width)
+		selectionBox = new FlxSprite(panelPadding, 0).makeGraphic(
+			panelWidth, // Ahora ocupa todo el ancho del panel
+			textHeight + textSpacing,
+			FlxColor.GRAY
+		);
+		selectionBox.alpha = 0.3;
+		selectionBox.scrollFactor.set();
+		selectionBox.visible = false;
+		panelGroup.add(selectionBox);
+		
 		dumbTexts = new FlxTypedGroup<FlxText>();
 		add(dumbTexts);
 
-		textAnim = new FlxText(300, 16);
-		textAnim.size = 26;
+		textAnim = new FlxText(FlxG.width - 300, 16, 300, "", 26);
+		textAnim.setFormat(Paths.font('vcr.ttf'), 26, FlxColor.WHITE, RIGHT);
 		textAnim.scrollFactor.set();
 		add(textAnim);
 
@@ -78,118 +72,130 @@ class AnimationDebug extends FlxState
 		add(camFollow);
 
 		FlxG.camera.follow(camFollow);
+	}
 
-		super.create();
+	function initPanel():Void
+	{
+		if (panelGroup != null && members.contains(panelGroup))
+		{
+			remove(panelGroup);
+		}
+		
+		panelGroup = new FlxTypedSpriteGroup<FlxSprite>();
+		
+		var panelBG = new FlxSprite(panelPadding, panelPadding).makeGraphic(
+			panelWidth, 
+			FlxG.height - (panelPadding * 2), 
+			FlxColor.BLACK
+		);
+		panelBG.alpha = 0.7;
+		panelBG.scrollFactor.set();
+		panelGroup.add(panelBG);
+		
+		var headerBG = new FlxSprite(panelBG.x, panelBG.y).makeGraphic(
+			panelWidth, 
+			panelHeaderHeight, 
+			FlxColor.fromRGB(40, 40, 40)
+		);
+		headerBG.alpha = 0.9;
+		headerBG.scrollFactor.set();
+		panelGroup.add(headerBG);
+		
+		var headerText = new FlxText(
+			headerBG.x + panelPadding, 
+			headerBG.y + (panelHeaderHeight - 20) / 2, 
+			panelWidth - (panelPadding * 2), 
+			"ANIMATION OFFSETS", 
+			20
+		);
+		headerText.setFormat(Paths.font('vcr.ttf'), 20, FlxColor.WHITE, LEFT);
+		headerText.scrollFactor.set();
+		panelGroup.add(headerText);
+		
+		add(panelGroup);
 	}
 
 	function genBoyOffsets(pushList:Bool = true):Void
 	{
-		var daLoop:Int = 0;
+		dumbTexts.clear();
+		animList = pushList ? [] : animList;
 
+		var startY:Float = panelPadding + panelHeaderHeight + textSpacing;
+		var contentWidth:Int = panelWidth - (panelPadding * 2) - contentIndent;
+		
 		for (anim => offsets in char.animOffsets)
 		{
-			var text:FlxText = new FlxText(10, 20 + (18 * daLoop), 0, anim + ": " + offsets, 15);
+			var text:FlxText = new FlxText(
+				panelPadding + contentIndent, // Indentación del contenido
+				startY + (dumbTexts.length * (textHeight + textSpacing)),
+				contentWidth,
+				'${anim}: (${offsets[0]}, ${offsets[1]})',
+				textHeight
+			);
+			text.offset.y += 3;
+			text.setFormat(Paths.font('vcr.ttf'), textHeight, FlxColor.WHITE, LEFT);
 			text.scrollFactor.set();
-			text.color = FlxColor.BLUE;
 			dumbTexts.add(text);
 
-			if (pushList)
-				animList.push(anim);
-
-			daLoop++;
+			if (pushList) animList.push(anim);
 		}
+		
+		updateSelectionBox();
 	}
 
-	function updateTexts():Void
+	function updateSelectionBox():Void
 	{
-		dumbTexts.forEach(function(text:FlxText)
+		if (dumbTexts.members[curAnim] != null)
 		{
-			text.kill();
-			dumbTexts.remove(text, true);
-		});
+			// Ajuste preciso de posición vertical
+			selectionBox.y = dumbTexts.members[curAnim].y - (textSpacing/2) - 2; // +1 para pequeño ajuste
+			selectionBox.visible = true;
+		}
+		else
+		{
+			selectionBox.visible = false;
+		}
 	}
 
 	override function update(elapsed:Float)
 	{
+		super.update(elapsed);
 		textAnim.text = char.animation.curAnim.name;
 
-		if (FlxG.keys.justPressed.E)
-			FlxG.camera.zoom += 0.25;
-		if (FlxG.keys.justPressed.Q)
-			FlxG.camera.zoom -= 0.25;
+		if (FlxG.keys.justPressed.E) FlxG.camera.zoom += 0.25;
+		if (FlxG.keys.justPressed.Q) FlxG.camera.zoom -= 0.25;
 
-		if (FlxG.keys.pressed.I || FlxG.keys.pressed.J || FlxG.keys.pressed.K || FlxG.keys.pressed.L)
-		{
-			if (FlxG.keys.pressed.I)
-				camFollow.velocity.y = -90;
-			else if (FlxG.keys.pressed.K)
-				camFollow.velocity.y = 90;
-			else
-				camFollow.velocity.y = 0;
+		camFollow.velocity.set(
+			FlxG.keys.pressed.J ? -90 : (FlxG.keys.pressed.L ? 90 : 0),
+			FlxG.keys.pressed.I ? -90 : (FlxG.keys.pressed.K ? 90 : 0)
+		);
 
-			if (FlxG.keys.pressed.J)
-				camFollow.velocity.x = -90;
-			else if (FlxG.keys.pressed.L)
-				camFollow.velocity.x = 90;
-			else
-				camFollow.velocity.x = 0;
-		}
-		else
+		var lastAnim = curAnim;
+		if (FlxG.keys.justPressed.W) curAnim = (curAnim - 1 + animList.length) % animList.length;
+		if (FlxG.keys.justPressed.S) curAnim = (curAnim + 1) % animList.length;
+		
+		if (lastAnim != curAnim)
 		{
-			camFollow.velocity.set();
+			updateSelectionBox();
 		}
 
-		if (FlxG.keys.justPressed.W)
+		var multiplier = FlxG.keys.pressed.SHIFT ? 10 : 1;
+		var offsetChanged = false;
+		
+		if (FlxG.keys.anyJustPressed([UP, DOWN, LEFT, RIGHT]))
 		{
-			curAnim -= 1;
+			var offsets = char.animOffsets.get(animList[curAnim]);
+			if (FlxG.keys.justPressed.UP) offsets[1] += multiplier;
+			if (FlxG.keys.justPressed.DOWN) offsets[1] -= multiplier;
+			if (FlxG.keys.justPressed.LEFT) offsets[0] += multiplier;
+			if (FlxG.keys.justPressed.RIGHT) offsets[0] -= multiplier;
+			offsetChanged = true;
 		}
 
-		if (FlxG.keys.justPressed.S)
-		{
-			curAnim += 1;
-		}
-
-		if (curAnim < 0)
-			curAnim = animList.length - 1;
-
-		if (curAnim >= animList.length)
-			curAnim = 0;
-
-		if (FlxG.keys.justPressed.S || FlxG.keys.justPressed.W || FlxG.keys.justPressed.SPACE)
+		if (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.W || FlxG.keys.justPressed.S || offsetChanged)
 		{
 			char.playAnim(animList[curAnim]);
-
-			updateTexts();
 			genBoyOffsets(false);
 		}
-
-		var upP = FlxG.keys.anyJustPressed([UP]);
-		var rightP = FlxG.keys.anyJustPressed([RIGHT]);
-		var downP = FlxG.keys.anyJustPressed([DOWN]);
-		var leftP = FlxG.keys.anyJustPressed([LEFT]);
-
-		var holdShift = FlxG.keys.pressed.SHIFT;
-		var multiplier = 1;
-		if (holdShift)
-			multiplier = 10;
-
-		if (upP || rightP || downP || leftP)
-		{
-			updateTexts();
-			if (upP)
-				char.animOffsets.get(animList[curAnim])[1] += 1 * multiplier;
-			if (downP)
-				char.animOffsets.get(animList[curAnim])[1] -= 1 * multiplier;
-			if (leftP)
-				char.animOffsets.get(animList[curAnim])[0] += 1 * multiplier;
-			if (rightP)
-				char.animOffsets.get(animList[curAnim])[0] -= 1 * multiplier;
-
-			updateTexts();
-			genBoyOffsets(false);
-			char.playAnim(animList[curAnim]);
-		}
-
-		super.update(elapsed);
 	}
 }

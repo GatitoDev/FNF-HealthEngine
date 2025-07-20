@@ -91,12 +91,14 @@ class Note extends FlxSprite
 			
 			if (prevNote.isSustainNote) {
 				prevNote.animation.play(['purplehold', 'bluehold', 'greenhold', 'redhold'][prevNote.noteData]);
-				
 				var scrollSpeed:Float = (FlxG.save.data.scrollSpeed != 1) ? FlxG.save.data.scrollSpeed : PlayState.SONG.speed;
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * scrollSpeed;
 				prevNote.updateHitbox();
-				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * scrollSpeed;
 			}
+			if (FlxG.save.data.downscroll) {
+				y -= height;
+				flipY = true;
+			} else y += height / 2;
 		}
 	}
 
