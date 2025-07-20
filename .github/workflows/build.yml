@@ -1,0 +1,53 @@
+name: Build Windows
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Haxe
+        uses: actions/setup-haxe@v1
+        with:
+          haxe-version: "4.3.2"
+
+      - name: Install Lime/OpenFL
+        run: |
+          haxelib install lime
+          haxelib run lime setup
+          haxelib git openfl https://github.com/openfl/openfl
+          haxelib git lime https://github.com/openfl/lime
+
+      - name: Install Haxe dependencies
+        run: |
+          haxelib install flixel
+          haxelib install flixel-ui
+          haxelib install flixel-addons
+          haxelib install hxcpp
+          haxelib install linc_luajit
+
+      - name: Cache Haxelib (opcional)
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/haxe/lib/
+            ~/haxe/extra/
+          key: ${{ runner.os }}-haxelib-${{ hashFiles('**/project.xml') }}
+
+      - name: Build for Windows
+        run: haxelib run lime test windows -v
+
+      - name: Upload artifact (opcional)
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-build
+          path: export/windows/bin/*.exe
