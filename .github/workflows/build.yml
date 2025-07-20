@@ -28,11 +28,12 @@ jobs:
 
       - name: Install Haxe dependencies
         run: |
-          haxelib install flixel
-          haxelib install flixel-ui
-          haxelib install flixel-addons
-          haxelib install hxcpp
-          haxelib install linc_luajit
+          haxelib install flixel 6.1.0
+          haxelib install flixel-ui 2.6.4
+          haxelib install flixel-addons 3.3.2
+          haxelib install hxcpp 4.3.2
+          haxelib install linc_luajit 0.0.7
+          haxelib install format 3.8.0
 
       - name: Cache Haxelib
         uses: actions/cache@v4
