@@ -2,9 +2,9 @@ name: Build Windows
 
 on:
   push:
-    branches: ["main"]
+    branches: ["master"]
   pull_request:
-    branches: ["main"]
+    branches: ["master"]
 
 jobs:
   build-windows:
@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Haxe
-        uses: actions/setup-haxe@v1
+        uses: krdlab/setup-haxe@v1
         with:
           haxe-version: "4.3.2"
 
@@ -34,8 +34,8 @@ jobs:
           haxelib install hxcpp
           haxelib install linc_luajit
 
-      - name: Cache Haxelib (opcional)
-        uses: actions/cache@v3
+      - name: Cache Haxelib
+        uses: actions/cache@v4
         with:
           path: |
             ~/haxe/lib/
@@ -45,9 +45,9 @@ jobs:
       - name: Build for Windows
         run: haxelib run lime test windows -v
 
-      - name: Upload artifact (opcional)
+      - name: Upload artifact
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-build
           path: export/windows/bin/*.exe
