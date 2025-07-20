@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.group.FlxSpriteGroup;
 import flixel.FlxSprite;
 import flixel.FlxG;
@@ -29,10 +30,16 @@ class AnimationDebug extends FlxState
 	var textSpacing:Int = 5;
 	var contentIndent:Int = 10; // Sangría adicional para el contenido
 
+	var camHUD:FlxCamera;
+
 	public function new(daAnim:String = 'spooky')
 	{
 		super();
 		FlxG.sound.music.stop();
+
+		camHUD = new FlxCamera();
+		camHUD.bgColor.alpha = 0;
+		FlxG.cameras.add(camHUD, false);
 
 		var gridBG:FlxSprite = FlxGridOverlay.create(10, 10);
 		gridBG.scrollFactor.set(0.5, 0.5);
@@ -72,6 +79,10 @@ class AnimationDebug extends FlxState
 		add(camFollow);
 
 		FlxG.camera.follow(camFollow);
+
+		panelGroup.cameras = [camHUD];
+		dumbTexts.cameras = [camHUD];
+		textAnim.cameras = [camHUD];
 	}
 
 	function initPanel():Void
@@ -83,9 +94,10 @@ class AnimationDebug extends FlxState
 		
 		panelGroup = new FlxTypedSpriteGroup<FlxSprite>();
 		
+		// La altura se calculará dinámicamente en genBoyOffsets
 		var panelBG = new FlxSprite(panelPadding, panelPadding).makeGraphic(
 			panelWidth, 
-			FlxG.height - (panelPadding * 2), 
+			100, // Valor temporal, será reemplazado
 			FlxColor.BLACK
 		);
 		panelBG.alpha = 0.7;
@@ -126,7 +138,7 @@ class AnimationDebug extends FlxState
 		for (anim => offsets in char.animOffsets)
 		{
 			var text:FlxText = new FlxText(
-				panelPadding + contentIndent, // Indentación del contenido
+				panelPadding + contentIndent,
 				startY + (dumbTexts.length * (textHeight + textSpacing)),
 				contentWidth,
 				'${anim}: (${offsets[0]}, ${offsets[1]})',
@@ -138,6 +150,16 @@ class AnimationDebug extends FlxState
 			dumbTexts.add(text);
 
 			if (pushList) animList.push(anim);
+		}
+		
+		// Calcular la nueva altura del panel
+		var totalContentHeight = dumbTexts.length * (textHeight + textSpacing);
+		var panelHeight = panelHeaderHeight + totalContentHeight;
+		
+		// Actualizar el tamaño del panelBG
+		if (panelGroup.members[0] != null)
+		{
+			panelGroup.members[0].makeGraphic(panelWidth, Std.int(panelHeight), FlxColor.BLACK);
 		}
 		
 		updateSelectionBox();

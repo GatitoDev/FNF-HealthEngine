@@ -2,8 +2,6 @@ package;
 
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
-import flixel.graphics.FlxGraphic;
-import flixel.system.FlxAssets.FlxGraphicAsset;
 
 class Sprite extends FlxSprite {
     public var animOffsets:Map<String, Array<Float>>;
