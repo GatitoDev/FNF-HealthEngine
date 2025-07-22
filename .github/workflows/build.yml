@@ -31,20 +31,20 @@ jobs:
         run: |
           haxelib install lime
           haxelib run lime setup
-          haxelib install openfl  # Usa install en lugar de git para mayor velocidad
+          haxelib install openfl
 
       - name: Install Haxe dependencies
         run: |
+          haxelib install hxp
+          haxelib install hxcpp
+          haxelib install format
           haxelib install flixel
           haxelib install flixel-ui
-          haxelib install flixel-addons
-          haxelib install hxcpp
           haxelib install linc_luajit
-          haxelib install format
-          haxelib install hxp
+          haxelib install flixel-addons
 
       - name: Build for Windows
-        run: haxelib run lime test windows -v
+        run: haxelib run lime build windows -v
 
       - name: Upload artifact
         if: success()
